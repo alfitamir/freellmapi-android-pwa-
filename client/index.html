@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="FreeLLMAPI — aggregate free LLM providers behind one OpenAI-compatible endpoint. Manage keys, models, the fallback chain and the playground." />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#09090b" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="FreeLLMAPI" />
+    <script src="/register-sw.js" defer></script>
+    <script>
+      try {
+        // Mirrors the ThemeProvider's resolution: 'system' (or nothing stored)
+        // follows the OS preference. Keep in sync with src/theme.tsx.
+        const theme = localStorage.getItem('theme')
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+        const dark = theme === 'dark' || (theme !== 'light' && prefersDark)
+        if (dark) {
+          document.documentElement.classList.add('dark')
+        }
+        document.documentElement.style.colorScheme = dark ? 'dark' : 'light'
+        document.documentElement.dataset.themeChoice =
+          theme === 'dark' || theme === 'light' ? theme : 'system'
+        // Same idea for text direction; keep in sync with RTL_LOCALES in
+        // src/i18n/locale-config.ts.
+        const locale = localStorage.getItem('freellmapi.locale')
+        if (locale && ['ar', 'he', 'fa', 'ur'].includes(locale)) {
+          document.documentElement.dir = 'rtl'
+        }
+      } catch {
+        // Keep the initial render working if localStorage is unavailable.
+      }
+    </script>
+    <title>FreeLLMAPI · Unified LLM Router</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
